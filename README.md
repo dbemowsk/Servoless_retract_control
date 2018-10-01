@@ -5,7 +5,9 @@ or retract.
 
 This is the menu for the firmware showing all options.  This can be viewed when connecting to the
 module using the terminal in mission planner by typing "menu".
+
 -------------------------------------------------------------------------------------------------
+
 ---=== Debug Menu ===---
 Toggle options:
   aon/aoff - toggle displaying altitude information
