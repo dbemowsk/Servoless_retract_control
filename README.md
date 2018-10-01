@@ -7,7 +7,7 @@ This is the menu for the firmware showing all options.  This can be viewed when 
 module using the terminal in mission planner by typing "menu".
 
 -------------------------------------------------------------------------------------------------
-
+```
 ---=== Debug Menu ===---
 Toggle options:
   aon/aoff - toggle displaying altitude information
@@ -36,5 +36,5 @@ Control:
             in a certain position.  
   Depending on the current height of the drone in relation to the baseline, retract and/or extend
   might not have any affect.
-  
+  ```
 -------------------------------------------------------------------------------------------------
