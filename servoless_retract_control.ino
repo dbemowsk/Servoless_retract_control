@@ -57,6 +57,8 @@ bool presInfo = false;  //Used to toggle the display of barometric pressure info
 bool extended = false;  //Used to identify if the landing gear is extended
 bool retracted = false; //Used to identify if the landing gear is retracted
 
+bool serialAvailable = true;
+
 int altitudeVal = 72;   //Stores the current altitude setpoint
 int extendVal = 1000;   //Defines the PWM value that will cause the gear to extend
 int retractVal = 2000;  //Defines the PWM value that will cause the gear to retract
@@ -71,8 +73,18 @@ String readString;      //Stores the string read from the serial port
 void setup() {
   //Attempt to start the serial port in the event that we are connected wit USB
   Serial.begin(9600);
-  //Give the sreial port time to initialize
-  delay(1000);//Set up the servo control
+  //Give the sreial port time to initialize.  If the serial port does not initialize
+  //within 500 cycles, we'll assume that there is no serial connection
+  int t = 0;
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB
+    if (t > 500) {
+      serialAvailable = false;
+      break;
+    }
+    t++;
+  }
+
   myservo.attach(SERVO_PIN);
   //Starts the barometric pressure sensor
   if (!bmp.begin()) {
@@ -392,7 +404,7 @@ void eepromRead() {
  * sprint - used to perform a controlled serial print based on if we are connected to USB or not
  */
 void sprint(String str) {
-  if (Serial) {
+  if (serialAvailable) {
     Serial.print(str);
   }
 }
@@ -401,8 +413,7 @@ void sprint(String str) {
  * sprintln - used to perform a controlled serial print line based on if we are connected to USB or not
  */
 void sprintln(String str) {
-  if (Serial) {
+  if (serialAvailable) {
     Serial.println(str);
   }
 }
-
