@@ -39,6 +39,9 @@
 * CHANGES : 10/4/18 - Better checking for serial port availability. This should 
 *                     prevent the board hanging from serial prints when powered 
 *                     on and not connected to a terminal.
+*           10/7/18 - Added code to trim the whitespace such as \r from submitted 
+*                     commands to hel this work in both the IDE serial monitor 
+*                     and in the Mission Planner terminal window.
 *
 ***/
 
