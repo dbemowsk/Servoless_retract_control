@@ -36,7 +36,9 @@
 *
 * AUTHOR :    Dan Bemowski        START DATE :    September 29, 2018
 *
-* CHANGES :
+* CHANGES : 10/4/18 - Better checking for serial port availability. This should 
+*                     prevent the board hanging from serial prints when powered 
+*                     on and not connected to a terminal.
 *
 ***/
 
@@ -114,6 +116,13 @@ void setup() {
   } else {
     sprintln("Buffer empty");
   }
+  //Make sure the landing gear is down when the board is booted
+  myservo.writeMicroseconds(extendVal);
+  #ifdef DEBUG
+  sprintln("Extending");
+  #endif
+  extended = true;
+  retracted = false;
 
   //Set our baseline readings from the BMP180 sensor
   altitudem = bmp.readAltitude(seaLevelPressure);
@@ -133,44 +142,46 @@ void loop() {
   
   //Check if a sttring was sent and decide what to do with it
   if (readString.length() >0) {
+    readString.trim();
+    //sprintln(readString);
     //Check if we requested the menu
-    if (readString == "menu\r") {
+    if (readString == "menu") {
       menu();
     }
     //Check if we are toggling altitude info
-    if (readString == "aon\r") {
+    if (readString == "aon") {
       altitudeInfo(true);
     }
-    if (readString == "aoff\r") {
+    if (readString == "aoff") {
       altitudeInfo(false);
     }
     //Check if we are toggling temperature info
-    if (readString == "ton\r") {
+    if (readString == "ton") {
       temperatureInfo(true);
     }
-    if (readString == "toff\r") {
+    if (readString == "toff") {
       temperatureInfo(false);
     }
     //Check if we are toggling pressure info
-    if (readString == "pon\r") {
+    if (readString == "pon") {
       pressureInfo(true);
     }
-    if (readString == "poff\r") {
+    if (readString == "poff") {
       pressureInfo(false);
     }
     //Check if we are toggling all infos
-    if (readString == "allon\r") {
+    if (readString == "allon") {
       altitudeInfo(true);
       temperatureInfo(true);
       pressureInfo(true);
     }
-    if (readString == "alloff\r") {
+    if (readString == "alloff") {
       altitudeInfo(false);
       temperatureInfo(false);
       pressureInfo(false);
     }
     //Check if an extend request was sent
-    if (readString == "extend\r") {
+    if (readString == "extend") {
       myservo.writeMicroseconds(extendVal);
       #ifdef DEBUG
       sprintln("Extending");
@@ -179,7 +190,7 @@ void loop() {
       retracted = false;
     }
     //Check if a retract request was sent
-    if (readString == "retract\r") {
+    if (readString == "retract") {
       myservo.writeMicroseconds(retractVal);
       #ifdef DEBUG
       sprintln("retracting");
